@@ -50,7 +50,7 @@ class LuxmonEntity(CoordinatorEntity[LuxmonDataUpdateCoordinator]):
         return item
 
     @property
-    def _unit(self) -> str | None:
+    def _unit_of_measurement(self) -> str | None:
         """Return the unit of measurement from lux-mon if available."""
         item = self._snapshot.get(self._key)
         if isinstance(item, dict):

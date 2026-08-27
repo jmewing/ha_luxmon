@@ -47,7 +47,7 @@ class LuxmonSensor(LuxmonEntity, SensorEntity):
         self._attr_name = meta.get("name", key.replace("_", " ").title())
         self._attr_device_class = meta.get("device_class")
         self._attr_state_class = meta.get("state_class")
-        self._attr_native_unit_of_measurement = meta.get("unit") or self._unit()
+        self._attr_native_unit_of_measurement = meta.get("unit") or self._unit_of_measurement()
         self._attr_entity_registry_enabled_default = meta.get(
             "entity_registry_enabled_default", True
         )
