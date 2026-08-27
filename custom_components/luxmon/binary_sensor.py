@@ -82,6 +82,7 @@ class LuxmonBinarySensor(LuxmonEntity, BinarySensorEntity):
         self.entity_description = ALERT_DESCRIPTIONS[key]
         self._attr_unique_id = f"{entry.entry_id}_{key}_binary_sensor"
         self._alert_key = key
+        coordinator._alerts_data = getattr(coordinator, "_alerts_data", {})
 
     @property
     def is_on(self) -> bool | None:

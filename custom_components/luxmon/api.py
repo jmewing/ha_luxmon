@@ -114,6 +114,29 @@ class LuxMonApiClient:
             _LOGGER.debug("Controllable settings endpoint not available: %s", exc)
             return {}
 
+    async def load_automation_rules(
+        self,
+        session: aiohttp.ClientSession,
+        rules: list[dict[str, Any]],
+        enabled: bool = True,
+    ) -> dict[str, Any]:
+        """Replace the full automation rule set and optionally enable the engine."""
+        async with session.post(
+            f"{self._base_url}/api/automation/rules",
+            headers={**self._headers(), "Content-Type": "application/json"},
+            json=rules,
+            timeout=aiohttp.ClientTimeout(total=30),
+        ) as resp:
+            resp.raise_for_status()
+        async with session.post(
+            f"{self._base_url}/api/automation/enable",
+            headers=self._headers(),
+            params={"enabled": "true" if enabled else "false"},
+            timeout=aiohttp.ClientTimeout(total=30),
+        ) as resp:
+            resp.raise_for_status()
+            return await resp.json()
+
     async def quick_charge_start(
         self,
         session: aiohttp.ClientSession,

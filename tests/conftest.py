@@ -67,6 +67,9 @@ class _FakeCoordinatorEntity:
     def __class_getitem__(cls, item):
         return cls
 
+    def async_write_ha_state(self):
+        pass
+
 
 ha.helpers = _make_module("homeassistant.helpers")
 ha.helpers.aiohttp_client = _make_module(
@@ -95,7 +98,7 @@ ha.config_entries = _make_module(
 )
 ha.core = _make_module(
     "homeassistant.core",
-    {"HomeAssistant": MagicMock, "callback": lambda fn: fn},
+    {"HomeAssistant": MagicMock, "callback": lambda fn: fn, "ServiceCall": MagicMock},
 )
 ha.data_entry_flow = _make_module(
     "homeassistant.data_entry_flow",
@@ -107,6 +110,7 @@ ha.components.binary_sensor = _make_module(
     {
         "BinarySensorDeviceClass": type("BinarySensorDeviceClass", (), {"PROBLEM": "problem"}),
         "BinarySensorEntity": object,
+        "BinarySensorEntityDescription": MagicMock,
     },
 )
 ha.components.button = _make_module(
@@ -115,7 +119,7 @@ ha.components.button = _make_module(
 )
 ha.components.number = _make_module(
     "homeassistant.components.number",
-    {"NumberEntity": object, "NumberEntityDescription": MagicMock, "NumberMode": MagicMock},
+    {"NumberEntity": object, "NumberEntityDescription": MagicMock, "NumberMode": type("NumberMode", (), {"AUTO": "auto", "BOX": "box", "SLIDER": "slider"})},
 )
 ha.components.select = _make_module(
     "homeassistant.components.select",
