@@ -190,4 +190,8 @@ SENSOR_METADATA: dict[str, dict] = {
         "name": "Fault code",
         "entity_registry_enabled_default": False,
     },
+    "state_label": {
+        "name": "State label",
+        "entity_registry_enabled_default": False,
+    },
 }

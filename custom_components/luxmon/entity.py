@@ -51,8 +51,14 @@ class LuxmonEntity(CoordinatorEntity[LuxmonDataUpdateCoordinator]):
 
     @property
     def _unit_of_measurement(self) -> str | None:
-        """Return the unit of measurement from lux-mon if available."""
+        """Return the unit of measurement from lux-mon if available.
+
+        Returns None for empty-string units so HA does not treat the entity
+        as numeric (an empty string unit would otherwise trigger HA's
+        numeric-coercion path and raise on string values).
+        """
         item = self._snapshot.get(self._key)
         if isinstance(item, dict):
-            return item.get("unit")
+            unit = item.get("unit")
+            return unit or None
         return None
