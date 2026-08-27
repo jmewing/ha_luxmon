@@ -13,7 +13,20 @@ This integration connects to the lux-mon REST API and exposes:
 
 ## Installation
 
-### HACS (recommended)
+### Home Assistant OS / Supervised (add-on)
+
+The easiest way to install on Home Assistant OS or a Supervised install is the
+[lux-mon add-on](https://github.com/jmewing/ha_luxmon_addons). It downloads this
+integration, installs it into `custom_components/`, and restarts Home Assistant
+Core for you.
+
+1. Add the add-on repository `https://github.com/jmewing/ha_luxmon_addons` to
+   your Supervisor (Settings → Add-ons → Add-on Store → ⋮ → Repositories).
+2. Install the **lux-mon** add-on and click **Start**.
+3. Wait for Home Assistant Core to restart.
+4. Go to **Settings → Devices & services → Add integration** and search for **lux-mon**.
+
+### HACS
 
 1. Add this repository as a custom repository in HACS (category: **Integration**).
 2. Install the **lux-mon** integration.
@@ -28,9 +41,11 @@ This integration connects to the lux-mon REST API and exposes:
 
 ## Configuration
 
-The integration only needs the host and port of the lux-mon API server. The default host is `192.168.1.100` and port is `8080`.
+The integration only needs the host and port of the lux-mon API server. The
+default host is `192.168.1.100` and port is `80`.
 
-After setup, you can change the polling interval, device ID, and inverter model from the integration options.
+After setup, you can change the polling interval, device ID, and inverter model
+from the integration options.
 
 ## Services
 
@@ -45,7 +60,9 @@ See `custom_components/luxmon/services.yaml` for field definitions.
 
 ## Security note
 
-Inverter serial numbers and datalog serial numbers are **never** stored in this integration. They remain in your lux-mon `.env` file or settings database. The integration uses a user-supplied host and an arbitrary device ID slug only.
+Inverter serial numbers and datalog serial numbers are **never** stored in this
+integration. They remain in your lux-mon `.env` file or settings database. The
+integration uses a user-supplied host and an arbitrary device ID slug only.
 
 ## Development
 
