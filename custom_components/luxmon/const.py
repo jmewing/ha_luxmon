@@ -20,7 +20,7 @@ DOMAIN = "luxmon"
 CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 DEFAULT_HOST = "192.168.1.100"
-DEFAULT_PORT = 8080
+DEFAULT_PORT = 80
 DEFAULT_SCAN_INTERVAL = 30
 
 CONF_DEVICE_ID = "device_id"
