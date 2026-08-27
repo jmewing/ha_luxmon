@@ -98,9 +98,16 @@ ha.helpers.update_coordinator = _make_module(
         "UpdateFailed": Exception,
     },
 )
+class _FakeConfigFlow:
+    """Minimal ConfigFlow stub that accepts the domain= kwarg."""
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__()
+
+
 ha.config_entries = _make_module(
     "homeassistant.config_entries",
-    {"ConfigEntry": MagicMock, "ConfigEntryNotReady": Exception},
+    {"ConfigEntry": MagicMock, "ConfigEntryNotReady": Exception, "ConfigFlow": _FakeConfigFlow, "OptionsFlow": _FakeConfigFlow},
 )
 ha.core = _make_module(
     "homeassistant.core",

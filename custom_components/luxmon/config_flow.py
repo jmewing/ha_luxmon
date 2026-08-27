@@ -1,7 +1,9 @@
 """Config flow for lux-mon integration."""
 from __future__ import annotations
 
+import json
 import logging
+from pathlib import Path
 from typing import Any
 
 import aiohttp
@@ -17,6 +19,19 @@ from .api import LuxMonApiClient
 
 _LOGGER = logging.getLogger(__name__)
 
+# File written by the HAOS add-on (run.sh) to seed connection defaults.
+_ADDON_DEFAULTS_FILE = Path(__file__).parent / ".addon-defaults.json"
+
+
+def _load_addon_defaults() -> dict[str, Any]:
+    """Read add-on-provided connection defaults, if present."""
+    try:
+        if _ADDON_DEFAULTS_FILE.exists():
+            return json.loads(_ADDON_DEFAULTS_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        _LOGGER.debug("Could not read add-on defaults file", exc_info=True)
+    return {}
+
 
 class LuxmonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for lux-mon."""
@@ -28,6 +43,7 @@ class LuxmonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     ) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
+        addon_defaults = _load_addon_defaults()
 
         if user_input is not None:
             host = user_input[CONF_HOST]
@@ -53,10 +69,19 @@ class LuxmonConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         data_schema = vol.Schema(
             {
-                vol.Required(CONF_HOST, default=DEFAULT_HOST): str,
-                vol.Required(CONF_PORT, default=DEFAULT_PORT): int,
+                vol.Required(
+                    CONF_HOST,
+                    default=addon_defaults.get("host") or DEFAULT_HOST,
+                ): str,
+                vol.Required(
+                    CONF_PORT,
+                    default=addon_defaults.get("port") or DEFAULT_PORT,
+                ): int,
                 vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
-                vol.Optional("api_token"): str,
+                vol.Optional(
+                    "api_token",
+                    default=addon_defaults.get("api_token") or "",
+                ): str,
             }
         )
 
