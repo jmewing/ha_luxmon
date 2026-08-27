@@ -9,12 +9,13 @@ This integration connects to the lux-mon REST API and exposes:
 - Controllable settings as `number`, `select`, and `switch` entities.
 - Alert states as `binary_sensor` entities.
 - Quick charge actions via `button` entities.
+- Service calls: `luxmon.quick_charge_start`, `luxmon.quick_charge_stop`, `luxmon.set_setting`, and `luxmon.load_automation_rules`.
 
 ## Installation
 
 ### HACS (recommended)
 
-1. Add this repository as a custom repository in HACS.
+1. Add this repository as a custom repository in HACS (category: **Integration**).
 2. Install the **lux-mon** integration.
 3. Restart Home Assistant.
 4. Go to **Settings → Devices & services → Add integration** and search for **lux-mon**.
@@ -29,7 +30,18 @@ This integration connects to the lux-mon REST API and exposes:
 
 The integration only needs the host and port of the lux-mon API server. The default host is `192.168.1.100` and port is `8080`.
 
-After setup, you can change the polling interval and device name from the integration options.
+After setup, you can change the polling interval, device ID, and inverter model from the integration options.
+
+## Services
+
+The following services are registered under the `luxmon` domain:
+
+- `luxmon.quick_charge_start` — start a timed AC quick charge.
+- `luxmon.quick_charge_stop` — stop an active quick charge and restore the prior current.
+- `luxmon.set_setting` — write any lux-mon runtime setting by name.
+- `luxmon.load_automation_rules` — replace the full automation rule set.
+
+See `custom_components/luxmon/services.yaml` for field definitions.
 
 ## Security note
 
