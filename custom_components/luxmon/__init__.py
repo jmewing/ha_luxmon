@@ -12,7 +12,7 @@ from homeassistant.core import HomeAssistant, callback, ServiceCall
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .api import LuxMonApiClient
-from .const import DOMAIN
+from .const import CONFIG_SCHEMA, DOMAIN
 from .coordinator import LuxmonDataUpdateCoordinator
 
 _LOGGER = logging.getLogger(__name__)

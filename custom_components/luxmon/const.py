@@ -12,8 +12,12 @@ from homeassistant.const import (
     PERCENTAGE,
 )
 from homeassistant.components.sensor import SensorDeviceClass, SensorStateClass
+import homeassistant.helpers.config_validation as cv
 
 DOMAIN = "luxmon"
+
+# This integration is config-entry only (no YAML configuration).
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 DEFAULT_HOST = "192.168.1.100"
 DEFAULT_PORT = 8080

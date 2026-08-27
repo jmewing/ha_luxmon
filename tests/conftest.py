@@ -72,6 +72,12 @@ class _FakeCoordinatorEntity:
 
 
 ha.helpers = _make_module("homeassistant.helpers")
+ha.helpers.config_validation = _make_module(
+    "homeassistant.helpers.config_validation",
+    {"config_entry_only_config_schema": lambda domain: {},
+     "empty_config_schema": lambda domain: {},
+     "platform_only_config_schema": lambda domain: {}},
+)
 ha.helpers.aiohttp_client = _make_module(
     "homeassistant.helpers.aiohttp_client",
     {"async_get_clientsession": MagicMock},
