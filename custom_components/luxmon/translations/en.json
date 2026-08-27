@@ -1,0 +1,35 @@
+{
+  "title": "lux-mon",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to lux-mon",
+        "description": "Enter the address of the lux-mon REST API server.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "scan_interval": "Polling interval (seconds)",
+          "api_token": "API token (optional)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the lux-mon API."
+    },
+    "abort": {
+      "already_configured": "This lux-mon server is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "lux-mon options",
+        "data": {
+          "scan_interval": "Polling interval (seconds)",
+          "device_id": "Device ID slug (no serials)",
+          "inverter_model": "Inverter model"
+        }
+      }
+    }
+  }
+}

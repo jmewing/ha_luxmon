@@ -1,0 +1,7 @@
+{
+  "name": "lux-mon",
+  "hacs": "1.6.0",
+  "domains": ["sensor", "number", "select", "switch", "binary_sensor", "button"],
+  "iot_class": "local_polling",
+  "homeassistant": "2023.1.0"
+}
