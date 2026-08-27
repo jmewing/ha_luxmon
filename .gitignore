@@ -1,0 +1,7 @@
+# Build artifacts
+build/
+custom_components/luxmon.zip
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/

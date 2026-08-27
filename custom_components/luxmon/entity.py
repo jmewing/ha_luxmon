@@ -39,7 +39,8 @@ class LuxmonEntity(CoordinatorEntity[LuxmonDataUpdateCoordinator]):
     @property
     def _snapshot(self) -> dict:
         """Return the latest lux-mon snapshot dict."""
-        return self.coordinator.data or {}
+        data = self.coordinator.data or {}
+        return data.get("registers", {})
 
     def _value(self) -> float | int | str | None:
         """Extract the numeric/string value for this entity's key."""
@@ -48,6 +49,7 @@ class LuxmonEntity(CoordinatorEntity[LuxmonDataUpdateCoordinator]):
             return item.get("value")
         return item
 
+    @property
     def _unit(self) -> str | None:
         """Return the unit of measurement from lux-mon if available."""
         item = self._snapshot.get(self._key)

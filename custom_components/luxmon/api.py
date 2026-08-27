@@ -81,6 +81,18 @@ class LuxMonApiClient:
             resp.raise_for_status()
             return await resp.json()
 
+    async def get_alerts(
+        self, session: aiohttp.ClientSession
+    ) -> dict[str, Any]:
+        """Fetch current live alert boolean states."""
+        async with session.get(
+            f"{self._base_url}/api/alerts/live",
+            headers=self._headers(),
+            timeout=aiohttp.ClientTimeout(total=30),
+        ) as resp:
+            resp.raise_for_status()
+            return await resp.json()
+
     async def get_controllable_settings(
         self, session: aiohttp.ClientSession
     ) -> dict[str, Any]:

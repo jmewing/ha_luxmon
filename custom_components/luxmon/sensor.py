@@ -19,7 +19,8 @@ async def async_setup_entry(
 ) -> None:
     """Set up lux-mon sensors from config entry."""
     coordinator: LuxmonDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
-    snapshot = coordinator.data or {}
+    data = coordinator.data or {}
+    snapshot = data.get("registers", {})
 
     entities: list[LuxmonSensor] = []
     for key in snapshot:
