@@ -60,14 +60,14 @@ class LuxmonSwitch(LuxmonEntity, SwitchEntity):
     @property
     def is_on(self) -> bool | None:
         """Return True if the setting is enabled."""
-        raw = self._meta.get("value")
-        if raw is None:
+        value = self._holding_value
+        if value is None:
             return None
-        return str(raw).lower() in ("true", "1", "yes", "on")
+        return str(value).lower() in ("true", "1", "yes", "on")
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the setting on."""
-        await self.coordinator._client.set_setting(
+        await self.coordinator._client.set_holding(
             self.coordinator._session, self._setting_name, "true"
         )
         self._meta["value"] = "true"
@@ -75,7 +75,7 @@ class LuxmonSwitch(LuxmonEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the setting off."""
-        await self.coordinator._client.set_setting(
+        await self.coordinator._client.set_holding(
             self.coordinator._session, self._setting_name, "false"
         )
         self._meta["value"] = "false"

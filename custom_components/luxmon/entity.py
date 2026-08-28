@@ -37,6 +37,28 @@ class LuxmonEntity(CoordinatorEntity[LuxmonDataUpdateCoordinator]):
         )
 
     @property
+    def _holding(self) -> dict:
+        """Return the latest holding-register dict from the coordinator."""
+        data = self.coordinator.data or {}
+        return data.get("holding", {})
+
+    @property
+    def _holding_value(self) -> float | int | None:
+        """Return the current raw/scaled value for this entity's key."""
+        item = self._holding.get(self._key)
+        if not isinstance(item, dict):
+            return None
+        raw = item.get("raw")
+        if raw is None:
+            return None
+        scale = item.get("scale", 1.0) or 1.0
+        val = raw * scale
+        # Return int when scale is 1.0 and value is integral, else float.
+        if scale == 1.0 and isinstance(val, float) and val.is_integer():
+            return int(val)
+        return val
+
+    @property
     def _snapshot(self) -> dict:
         """Return the latest lux-mon snapshot dict."""
         data = self.coordinator.data or {}

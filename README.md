@@ -6,7 +6,7 @@ This integration connects to the lux-mon REST API and exposes:
 
 - Live inverter sensors (SOC, voltage, current, power, energy, temperatures, etc.).
 - Energy Dashboard sensors (`pv_energy_total`, `grid_import_energy_total`, etc.).
-- Controllable settings as `number`, `select`, and `switch` entities.
+- Controllable settings as `number`, `select`, and `switch` entities (these now write directly to inverter holding registers via lux-mon's `/api/holding` endpoints, so changes take effect immediately on the inverter).
 - Alert states as `binary_sensor` entities.
 - Quick charge actions via `button` entities.
 - Service calls: `luxmon.quick_charge_start`, `luxmon.quick_charge_stop`, `luxmon.set_setting`, and `luxmon.load_automation_rules`.

@@ -62,15 +62,15 @@ class LuxmonSelect(LuxmonEntity, SelectEntity):
 
     @property
     def current_option(self) -> str | None:
-        """Return the current selected option."""
-        raw = self._meta.get("value")
-        if raw is None:
+        """Return the current selected option from live holding-register reads."""
+        value = self._holding_value
+        if value is None:
             return None
-        return str(raw)
+        return str(value)
 
     async def async_select_option(self, option: str) -> None:
-        """Update the setting on lux-mon."""
-        await self.coordinator._client.set_setting(
+        """Update the holding register on lux-mon."""
+        await self.coordinator._client.set_holding(
             self.coordinator._session, self._setting_name, option
         )
         self._meta["value"] = option

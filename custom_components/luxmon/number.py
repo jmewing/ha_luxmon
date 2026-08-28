@@ -64,21 +64,15 @@ class LuxmonNumber(LuxmonEntity, NumberEntity):
 
     @property
     def native_value(self) -> float | int | None:
-        """Return the current value."""
-        raw = self._meta.get("value")
-        if raw is None:
-            return None
-        try:
-            return float(raw)
-        except (TypeError, ValueError):
-            return None
+        """Return the current value from live holding-register reads."""
+        return self._holding_value
 
     async def async_set_native_value(self, value: float) -> None:
-        """Update the setting on lux-mon."""
+        """Update the holding register on lux-mon."""
         step = self._attr_native_step
         if step is not None and step == int(step):
             value = int(value)
-        await self.coordinator._client.set_setting(
+        await self.coordinator._client.set_holding(
             self.coordinator._session, self._setting_name, value
         )
         self._meta["value"] = value

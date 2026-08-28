@@ -40,6 +40,8 @@ class LuxmonDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch data from lux-mon."""
         try:
             data = await self._client.get_status(self._session)
+            holding = await self._client.get_holding(self._session)
+            data["holding"] = holding.get("registers", {})
         except Exception as exc:
             raise UpdateFailed(f"Error fetching lux-mon data: {exc}") from exc
 

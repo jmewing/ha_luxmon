@@ -98,9 +98,21 @@ class LuxMonApiClient:
     ) -> dict[str, Any]:
         """Fetch controllable settings metadata.
 
-        Requires lux-mon endpoint added in Phase 3.
-        Falls back to empty dict if endpoint is absent.
+        Prefers the new /api/holding/controllable endpoint (actual inverter
+        holding registers). Falls back to /api/settings/controllable for
+        older lux-mon versions.
         """
+        try:
+            async with session.get(
+                f"{self._base_url}/api/holding/controllable",
+                headers=self._headers(),
+                timeout=aiohttp.ClientTimeout(total=10),
+            ) as resp:
+                if resp.status == 200:
+                    return await resp.json()
+        except Exception as exc:
+            _LOGGER.debug("Holding controllable endpoint not available: %s", exc)
+
         try:
             async with session.get(
                 f"{self._base_url}/api/settings/controllable",
@@ -113,6 +125,31 @@ class LuxMonApiClient:
         except Exception as exc:
             _LOGGER.debug("Controllable settings endpoint not available: %s", exc)
             return {}
+
+    async def get_holding(
+        self, session: aiohttp.ClientSession
+    ) -> dict[str, Any]:
+        """Fetch current holding register values directly from the inverter."""
+        async with session.get(
+            f"{self._base_url}/api/holding",
+            headers=self._headers(),
+            timeout=aiohttp.ClientTimeout(total=30),
+        ) as resp:
+            resp.raise_for_status()
+            return await resp.json()
+
+    async def set_holding(
+        self, session: aiohttp.ClientSession, name: str, value: Any
+    ) -> dict[str, Any]:
+        """Write a single named holding register to the inverter."""
+        async with session.put(
+            f"{self._base_url}/api/holding/{name}",
+            headers={**self._headers(), "Content-Type": "application/json"},
+            json={"value": value},
+            timeout=aiohttp.ClientTimeout(total=30),
+        ) as resp:
+            resp.raise_for_status()
+            return await resp.json()
 
     async def load_automation_rules(
         self,
